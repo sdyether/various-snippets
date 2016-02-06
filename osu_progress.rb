@@ -7,7 +7,7 @@ class OsuMonth
 	START_YEAR = 2007
 	START_MONTH = 10 #OCTOBER
 	COMPLETION_STRING = "COMPLETE"
-
+	
 	attr_accessor :year, :month, :is_complete
 	
 	def initialize(year, month, is_complete = false)
@@ -66,7 +66,6 @@ def mark_month_complete(year, month, month_list)
 			m.is_complete = true
 		end
 	end
-	
 end
 
 def print_months(month_list)
@@ -90,17 +89,7 @@ month_list = OsuMonth.get_valid_months
 
 #add months I have completed
 mark_year_complete(2007, month_list)
-mark_month_complete(2008, "January", month_list)
-mark_month_complete(2008, "February", month_list)
-mark_month_complete(2008, "March", month_list)
-mark_month_complete(2008, "April", month_list)
-mark_month_complete(2008, "May", month_list)
-mark_month_complete(2008, "June", month_list)
-mark_month_complete(2008, "July", month_list)
-mark_month_complete(2008, "August", month_list)
+Date::MONTHNAMES[Date::MONTHNAMES.index("January")..Date::MONTHNAMES.index("November")].each { | m | mark_month_complete(2008, m, month_list) }
 
 print_months(month_list)
-
-
-
 
