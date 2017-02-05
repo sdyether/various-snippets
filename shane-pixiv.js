@@ -7,6 +7,7 @@
 // @include             http://www.pixiv.net/member_illust.php?id=*
 // @include             http://www.pixiv.net/member_illust.php?mode=medium&illust_id=*
 // @include             http://www.pixiv.net/member_tag_all.php?id=*
+// @include             http://www.pixiv.net/bookmark_new_illust.php?p=*
 // ==/UserScript==
 
 (function ()
@@ -17,10 +18,10 @@
 	var isStrippingGarbage = true;
 	
 	var isHighlightingTags = true;
-	var tagsToHighlight = ['秋山澪', 'けいおん!'];
+	var tagsToHighlight = ['秋山澪'];
 	
-	var isThemingWorksPage = false;
-	var worksPageLastImageId = 59273206;
+	var isHighlightingSeenImages = true;
+	var lastSeenImageId = 61112299;
 	
     /* funcs */
 	
@@ -31,6 +32,10 @@
 
 	function isWorksPage() {
 		return document.URL.match(/http:\/\/www\.pixiv\.net\/member_illust\.php\?id=/i);
+	}
+	
+	function isNewIllustPage() {
+		return document.URL.match(/http:\/\/www\.pixiv\.net\/bookmark_new_illust\.php/i);
 	}
 	
 	function isTagsPage() {
@@ -124,12 +129,12 @@
 		buildMangaThumbnails();
 	}
 	
-	//* highlight old images */
-	if (isWorksPage() && isThemingWorksPage) {
+	//* highlight old images in new_illust feed */
+	if (isNewIllustPage() && isHighlightingSeenImages) {
 		images = document.querySelectorAll("li.image-item");
 		for (i = 0; i < images.length; ++i) {
 			el = images[i].querySelector("a");
-			if (el.href.match(/\d+/) <= worksPageLastImageId) {
+			if (el.href.match(/\d+/) <= lastSeenImageId) {
 				el.setAttribute("style", "border:3px solid #33FF33");
 			}
 		}
