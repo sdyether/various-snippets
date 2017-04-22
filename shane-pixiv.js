@@ -4,11 +4,14 @@
 // @version             0.0.1
 // @description         shane-pixiv
 // @author              shane-pixiv
-// @include             http://www.pixiv.net/member_illust.php?id=*
-// @include             http://www.pixiv.net/member_illust.php?mode=medium&illust_id=*
-// @include             http://www.pixiv.net/member_tag_all.php?id=*
-// @include             http://www.pixiv.net/bookmark_new_illust.php?p=*
+// @include             https://www.pixiv.net/member_illust.php?id=*
+// @include             https://www.pixiv.net/member_illust.php?mode=medium&illust_id=*
+// @include             https://www.pixiv.net/member_tag_all.php?id=*
+// @include             https://www.pixiv.net/bookmark_new_illust.php?p=*
+
+
 // ==/UserScript==
+
 
 (function ()
 {
@@ -21,25 +24,32 @@
 	var tagsToHighlight = ['秋山澪'];
 	
 	var isHighlightingSeenImages = true;
-	var lastSeenImageId = 61112299;
+	var lastSeenImageId = 62327025;
 	
     /* funcs */
+
+	function removeAllByQuerySelector(selector) {
+		while (document.querySelector(selector) !== null) {
+			el = document.querySelector(selector);
+			el.parentNode.removeChild(el);
+		}
+	}
 	
 	function isMangaPage() {
-		return document.URL.match(/http:\/\/www\.pixiv\.net\/member_illust\.php\?mode=medium&illust_id=/i)
+		return document.URL.match(/https:\/\/www\.pixiv\.net\/member_illust\.php\?mode=medium&illust_id=/i)
 		&& document.querySelectorAll("a._work.multiple").length !== 0;
 	}
 
 	function isWorksPage() {
-		return document.URL.match(/http:\/\/www\.pixiv\.net\/member_illust\.php\?id=/i);
+		return document.URL.match(/https:\/\/www\.pixiv\.net\/member_illust\.php\?id=/i);
 	}
 	
 	function isNewIllustPage() {
-		return document.URL.match(/http:\/\/www\.pixiv\.net\/bookmark_new_illust\.php/i);
+		return document.URL.match(/https:\/\/www\.pixiv\.net\/bookmark_new_illust\.php/i);
 	}
 	
 	function isTagsPage() {
-		return document.URL.match(/http:\/\/www\.pixiv\.net\/member_tag_all.php\?id=/i);
+		return document.URL.match(/https:\/\/www\.pixiv\.net\/member_tag_all.php\?id=/i);
 	}
 	
 	function getMangaPageCount() {
@@ -66,7 +76,7 @@
 	
 	/* We can't determine whether the original files are png or jpg without a call */
 	function buildMangaThumbnails() {
-	   var url = "http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=" + getPixivId() + "&page=0";
+	   var url = "https://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=" + getPixivId() + "&page=0";
 
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
@@ -151,19 +161,18 @@
 	}
 	
 	/* do some page clean-up/quasi-adblocking (requests themselves aren't blocked) */
-	if (isStrippingGarbage) {
-		
-		function removeAllByQuerySelector(selector) {
-			while (document.querySelector(selector) !== null) {
-				el = document.querySelector(selector);
-				el.parentNode.removeChild(el);
-			}
+	 
+	$( document ).ready(function() {
+		if (isStrippingGarbage) {
+			removeAllByQuerySelector("a.ads_anchor");
+			removeAllByQuerySelector("div.share-link-container");
+			removeAllByQuerySelector("div.worksShare");
+			removeAllByQuerySelector("ul._toolmenu");
+			removeAllByQuerySelector("div.thumbnail-menu");
+			removeAllByQuerySelector("p.worksOptionRightInfo");
+			removeAllByQuerySelector("div._one-click-bookmark");
+			$(".user.ui-profile-popup").removeAttr('class');
 		}
-		
-		removeAllByQuerySelector("a.ads_anchor");
-		removeAllByQuerySelector("ul.share-button");
-		removeAllByQuerySelector("div.worksShare");
-		removeAllByQuerySelector("ul._toolmenu");
-	}
+	});
 
 }());
