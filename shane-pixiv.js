@@ -7,7 +7,7 @@
 // @include             https://www.pixiv.net/member_illust.php?id=*
 // @include             https://www.pixiv.net/member_illust.php?mode=medium&illust_id=*
 // @include             https://www.pixiv.net/member_tag_all.php?id=*
-// @include             https://www.pixiv.net/bookmark_new_illust.php?p=*
+// @include             https://www.pixiv.net/bookmark_new_illust.php*
 
 
 // ==/UserScript==
